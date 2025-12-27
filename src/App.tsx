@@ -19,15 +19,27 @@ export default function App() {
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [showContactForm, setShowContactForm] = useState(false);
   const [cursorPosition, setCursorPosition] = useState({ x: 0, y: 0 });
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
 
   useEffect(() => {
+    // Detect if device is touch-enabled
+    const checkTouchDevice = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0);
+    };
+    
+    checkTouchDevice();
+  }, []);
+
+  useEffect(() => {
+    if (isTouchDevice) return; // Skip cursor tracking on touch devices
+    
     const handleMouseMove = (e: MouseEvent) => {
       setCursorPosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isTouchDevice]);
 
   useEffect(() => {
     // Create SVG favicon
@@ -82,36 +94,38 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white p-4 md:p-8 relative overflow-hidden cursor-none">
-      {/* Custom Black Hole Cursor */}
-      <div
-        className="fixed pointer-events-none z-[9999] mix-blend-screen"
-        style={{
-          left: `${cursorPosition.x}px`,
-          top: `${cursorPosition.y}px`,
-          transform: 'translate(-50%, -50%)',
-        }}
-      >
-        {/* Outer spinning ring */}
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 w-16 h-16 animate-spin-slow">
-          <div className="absolute inset-0 bg-gradient-radial from-transparent via-purple-500/60 to-transparent rounded-full blur-sm"></div>
+    <div className={`min-h-screen bg-black text-white p-4 md:p-8 relative overflow-hidden ${!isTouchDevice ? 'cursor-none' : ''}`}>
+      {/* Custom Black Hole Cursor - Only on non-touch devices */}
+      {!isTouchDevice && (
+        <div
+          className="fixed pointer-events-none z-[9999] mix-blend-screen"
+          style={{
+            left: `${cursorPosition.x}px`,
+            top: `${cursorPosition.y}px`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        >
+          {/* Outer spinning ring */}
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 w-16 h-16 animate-spin-slow">
+            <div className="absolute inset-0 bg-gradient-radial from-transparent via-purple-500/60 to-transparent rounded-full blur-sm"></div>
+          </div>
+          
+          {/* Middle ring */}
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 w-10 h-10 animate-spin-reverse">
+            <div className="absolute inset-0 bg-gradient-radial from-transparent via-purple-400/70 to-transparent rounded-full blur-md"></div>
+          </div>
+          
+          {/* Inner core */}
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 w-6 h-6 animate-pulse-slow">
+            <div className="absolute inset-0 bg-gradient-radial from-purple-500/90 via-purple-600/70 to-transparent rounded-full"></div>
+          </div>
+          
+          {/* Center dot */}
+          <div className="absolute -translate-x-1/2 -translate-y-1/2 w-2 h-2">
+            <div className="absolute inset-0 bg-purple-300 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.8)]"></div>
+          </div>
         </div>
-        
-        {/* Middle ring */}
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 w-10 h-10 animate-spin-reverse">
-          <div className="absolute inset-0 bg-gradient-radial from-transparent via-purple-400/70 to-transparent rounded-full blur-md"></div>
-        </div>
-        
-        {/* Inner core */}
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 w-6 h-6 animate-pulse-slow">
-          <div className="absolute inset-0 bg-gradient-radial from-purple-500/90 via-purple-600/70 to-transparent rounded-full"></div>
-        </div>
-        
-        {/* Center dot */}
-        <div className="absolute -translate-x-1/2 -translate-y-1/2 w-2 h-2">
-          <div className="absolute inset-0 bg-purple-300 rounded-full shadow-[0_0_10px_rgba(168,85,247,0.8)]"></div>
-        </div>
-      </div>
+      )}
 
       {/* Animated Purple Blackhole Background */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
