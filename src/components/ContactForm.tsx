@@ -24,7 +24,7 @@ export function ContactForm({ onClose }: ContactFormProps) {
     const subject = `New Contact Form Submission from ${formData.name}`;
     const body = `Name: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0APhone: ${formData.phone}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
     
-    window.location.href = `mailto:your-email@example.com?subject=${encodeURIComponent(subject)}&body=${body}`;
+    window.location.href = `mailto:uiforge.aarya@gmail.com?subject=${encodeURIComponent(subject)}&body=${body}`;
     
     // Close the form after 2 seconds
     setTimeout(() => {
@@ -89,7 +89,7 @@ export function ContactForm({ onClose }: ContactFormProps) {
               value={formData.email}
               onChange={handleChange}
               className="w-full bg-[rgba(39,39,42,0.8)] border border-[#3f3f46] rounded-lg px-4 py-3 text-white placeholder-[#52525b] focus:outline-none focus:border-[#52525b] transition-colors duration-200"
-              placeholder="your.email@example.com"
+              placeholder="uiforge.aarya@gmail.com"
             />
           </div>
 
