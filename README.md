@@ -6,7 +6,7 @@ The portfolio was designed in **Figma** and implemented as a modern frontend app
 
 ---
 
-## 🚀 Tech Stack
+## 🚀 Tech Stack :
 
 - HTML5
 - CSS3
